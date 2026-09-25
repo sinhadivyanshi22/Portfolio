@@ -1,0 +1,2755 @@
+<!DOCTYPE html>
+
+<html lang="en" class="scroll-smooth">
+
+<head>
+
+  <meta charset="UTF-8" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Divyanshi Sinha</title>
+
+  
+
+  <!-- Google Fonts: Syne & JetBrains Mono for Cyberpunk/Modern tech aesthetic -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@500;700;800&display=swap" rel="stylesheet">
+
+  
+
+  <!-- FontAwesome Icons for developer badges and interfaces -->
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+
+
+  <!-- Tailwind CSS CDN -->
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  
+
+  <script>
+
+    tailwind.config = {
+
+      darkMode: 'class',
+
+      theme: {
+
+        extend: {
+
+          colors: {
+
+            cyberDark: '#08080d',
+
+            cyberCard: 'rgba(14, 17, 27, 0.75)',
+
+            cyberBorder: 'rgba(0, 242, 254, 0.2)',
+
+            neonCyan: '#00f2fe',
+
+            neonPurple: '#9b51e0',
+
+            neonPink: '#ff007f',
+
+            neonGreen: '#00ff9d',
+
+          },
+
+          fontFamily: {
+
+            heading: ['Syne', 'sans-serif'],
+
+            mono: ['"JetBrains Mono"', 'monospace'],
+
+          },
+
+          boxShadow: {
+
+            'neon-cyan': '0 0 20px rgba(0, 242, 254, 0.35)',
+
+            'neon-purple': '0 0 20px rgba(155, 81, 224, 0.35)',
+
+            'neon-pink': '0 0 20px rgba(255, 0, 127, 0.35)',
+
+            'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.6)',
+
+          },
+
+        }
+
+      }
+
+    }
+
+  </script>
+
+
+
+  <link rel="stylesheet" href="style.css" />
+
+ 
+
+</head>
+
+
+
+<body class="relative min-h-screen selection:bg-cyan-500 selection:text-black">
+
+
+
+  <div id="cursor-dot" class="fixed top-0 left-0 w-2.5 h-2.5 bg-neonCyan rounded-full pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-transform duration-75 shadow-[0_0_12px_#00f2fe]"></div>
+
+  <div id="custom-cursor" class="fixed top-0 left-0 w-9 h-9 border border-neonCyan/60 rounded-full pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-all duration-200 ease-out shadow-[0_0_15px_rgba(0,242,254,0.3)]"></div>
+
+
+
+  <canvas id="particleCanvas" class="fixed top-0 left-0 w-full h-full pointer-events-none z-0"></canvas>
+
+
+
+  <header class="fixed top-0 left-0 w-full z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between pointer-events-none backdrop-blur-md border-b border-white/5 bg-cyberDark/60">
+
+    <!-- Student Brand Indicator -->
+
+    <div class="pointer-events-auto flex items-center gap-3">
+
+      <div class="relative w-8 h-8 rounded-lg bg-black border border-neonCyan/50 flex items-center justify-center font-heading font-bold text-neonCyan shadow-neon-cyan text-sm">
+
+        DS
+
+        <span class="absolute -top-1 -right-1 flex h-2 w-2">
+
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-neonGreen opacity-75"></span>
+
+          <span class="relative inline-flex rounded-full h-2 w-2 bg-neonGreen"></span>
+
+        </span>
+
+      </div>
+
+      <div class="hidden sm:block">
+
+        <span class="text-xs tracking-wider uppercase text-slate-300 font-bold font-heading block leading-tight">Divyanshi Sinha</span>
+
+        <span class="text-[10px] text-cyan-400 font-mono tracking-widest">CSE'27 // FINAL YEAR</span>
+
+      </div>
+
+    </div>
+
+
+
+    <!-- Live Real-Time Neon HUD Clock (Top Right) -->
+
+    <div class="pointer-events-auto flex items-center gap-2.5 bg-black/80 border border-cyan-500/30 rounded-xl px-3.5 py-1.5 shadow-[0_0_15px_rgba(0,242,254,0.15)] font-mono">
+
+      <i class="fa-regular fa-clock text-neonCyan text-xs animate-pulse"></i>
+
+      <div class="flex flex-col text-right">
+
+        <span id="hud-time" class="text-xs sm:text-sm font-semibold tracking-wider text-white">00:00:00 AM</span>
+
+        <span id="hud-date" class="text-[9px] uppercase tracking-widest text-slate-400 font-medium">SYS.DATE</span>
+
+      </div>
+
+      <div class="h-5 w-[1px] bg-slate-700 hidden sm:block mx-1"></div>
+
+      <div class="hidden sm:flex items-center gap-1.5 text-[10px] text-emerald-400">
+
+        <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+
+        OPEN TO WORK
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+
+  <main class="relative z-10 w-full pt-20 pb-36 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto space-y-28 md:space-y-36">
+
+    
+
+    <!-- Hero Section -->
+
+    <section id="hero" class="min-h-[85vh] flex flex-col justify-center items-start pt-8 pb-10">
+
+      <div class="w-full grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+
+        
+
+        <div class="lg:col-span-8 space-y-6">
+
+          <!-- Terminal badge -->
+
+          <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-cyan-500/40 text-cyan-300 text-xs font-mono tracking-wide">
+
+            <span class="inline-block w-2 h-2 rounded-full bg-neonCyan"></span>
+
+            <span>OPEN TO WORK</span>
+
+          </div>
+
+
+
+          <!-- Main Greeting -->
+
+          <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white leading-none">
+
+            DIVYANSHI SINHA <br />
+
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-neonCyan via-neonPurple to-neonPink drop-shadow-[0_0_25px_rgba(0,242,254,0.4)]">
+
+              SOFTWARE ENGINEERING
+
+            </span><br />
+
+            & AI.
+
+          </h1>
+
+
+
+          <!-- Dynamic Typing Terminal Line -->
+
+          <div class="flex items-center gap-2 text-base sm:text-xl text-slate-300 font-mono">
+
+            <span class="text-neonCyan">&gt;</span>
+
+            <span id="dynamic-type" class="text-cyan-200"></span>
+
+            <span class="w-2.5 h-5 bg-neonCyan inline-block animate-pulse"></span>
+
+          </div>
+
+
+
+          <!-- Bio Pitch -->
+
+          <p class="text-slate-400 text-sm sm:text-base max-w-2xl leading-relaxed font-sans font-normal">
+
+            Final-year undergraduate with rigorous foundation in <span class="text-cyan-300 font-mono font-medium">Data Structures and Algorithms</span>, <span class="text-purple-300 font-mono font-medium">Artificial Intelligence</span>, and <span class="text-pink-300 font-mono font-medium">Machine Learning</span>. Building production-ready software backed by solid engineering metrics.
+
+          </p>
+
+
+
+          <!-- CTAs -->
+
+          <div class="pt-3 flex flex-wrap items-center gap-4">
+
+            <a href="#projects" class="interactive-btn group relative px-6 py-3 rounded-xl bg-neonCyan text-black font-heading font-bold text-sm tracking-wide shadow-[0_0_20px_rgba(0,242,254,0.5)] hover:shadow-[0_0_30px_rgba(0,242,254,0.8)] transition duration-300 flex items-center gap-2">
+
+              <span>EXPLORE PROJECTS</span>
+
+              <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-1"></i>
+
+            </a>
+
+
+
+            <a href="#contact" class="interactive-btn px-6 py-3 rounded-xl bg-transparent text-slate-200 font-heading font-bold text-sm tracking-wide border border-white/20 hover:border-neonPurple hover:text-neonPurple hover:shadow-[0_0_20px_rgba(155,81,224,0.4)] transition duration-300 flex items-center gap-2">
+
+              <i class="fa-regular fa-envelope"></i>
+
+              <span>GET IN TOUCH</span>
+
+            </a>
+
+
+
+            <button id="copy-email-btn" class="interactive-btn px-4 py-3 rounded-xl bg-white/5 border border-white/10 hover:border-white/30 text-slate-300 text-xs font-mono transition flex items-center gap-2" title="Copy Email">
+
+              <i class="fa-regular fa-copy text-neonCyan"></i>
+
+              <span id="copy-email-text">sinhadivyanshi2205@gmail.com</span>
+
+            </button>
+
+          </div>
+
+
+
+          <!-- Quick Interactive Metrics Strip -->
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-6 border-t border-white/10">
+
+            <div class="p-3 rounded-xl bg-white/5 border border-white/5 hover:border-cyan-500/40 transition">
+
+              <div class="text-xl sm:text-2xl font-bold font-mono text-neonCyan">7.2 / 10</div>
+
+              <div class="text-[11px] text-slate-400 font-sans tracking-wide mt-0.5">Undergrad CGPA</div>
+
+            </div>
+
+            <div class="p-3 rounded-xl bg-white/5 border border-white/5 hover:border-purple-500/40 transition">
+
+              <div class="text-xl sm:text-2xl font-bold font-mono text-neonPurple">60+</div>
+
+              <div class="text-[11px] text-slate-400 font-sans tracking-wide mt-0.5">LeetCode / DSA Problems</div>
+
+            </div>
+
+            <div class="p-3 rounded-xl bg-white/5 border border-white/5 hover:border-pink-500/40 transition">
+
+              <div class="text-xl sm:text-2xl font-bold font-mono text-neonPink">8+</div>
+
+              <div class="text-[11px] text-slate-400 font-sans tracking-wide mt-0.5">Production Repos</div>
+
+            </div>
+
+            <div class="p-3 rounded-xl bg-white/5 border border-white/5 hover:border-emerald-500/40 transition">
+
+              <div class="text-xl sm:text-2xl font-bold font-mono text-emerald-400">2027</div>
+
+              <div class="text-[11px] text-slate-400 font-sans tracking-wide mt-0.5">Batch Graduation</div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Right Terminal Mockup -->
+
+        <div class="lg:col-span-4 w-full">
+
+          <div class="glass-card rounded-2xl border border-cyan-500/30 overflow-hidden shadow-2xl pulse-glow-border">
+
+            <div class="px-4 py-2.5 bg-black/80 border-b border-white/10 flex items-center justify-between text-xs text-slate-400">
+
+              <div class="flex items-center gap-1.5">
+
+                <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+
+                <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+
+                <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+
+              </div>
+
+              <span class="font-mono text-[11px] text-cyan-400">divyanshi@terminal: ~</span>
+
+              <i class="fa-solid fa-terminal text-slate-600"></i>
+
+            </div>
+
+            <div class="p-5 font-mono text-xs space-y-2 text-slate-300 bg-black/70 leading-relaxed">
+
+              <p class="text-slate-500"># Current Academic Sprint</p>
+
+              <p><span class="text-neonCyan">&gt;</span> target: <span class="text-green-400">"SDE 1 / Grad SWE '27"</span></p>
+
+              <p><span class="text-neonCyan">&gt;</span> major: <span class="text-white">"Computer Science & Eng."</span></p>
+
+              <p><span class="text-neonCyan">&gt;</span> coursework: <span class="text-purple-400">["OS", "DBMS", "CN", "DSA", "Distributed Systems"]</span></p>
+
+              <p><span class="text-neonCyan">&gt;</span> thesis: <span class="text-amber-300">"Fault-Tolerant Raft Consensus Engine"</span></p>
+
+              <p><span class="text-neonCyan">&gt;</span> uptime: <span class="text-cyan-300">"4th Year, 8th Sem"</span></p>
+
+              <div class="pt-3 border-t border-white/10 flex items-center justify-between text-[11px]">
+
+                <span class="text-emerald-400 flex items-center gap-1.5">
+
+                  <i class="fa-solid fa-circle-check"></i> System All-Green
+
+                </span>
+
+                <span class="text-slate-400 font-mono">B.Tech CSE</span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+    </section>
+
+
+
+    <section id="about" class="reveal-elem scroll-mt-24">
+
+      <div class="flex items-center gap-3 mb-10">
+
+        <span class="text-neonCyan font-mono text-sm tracking-widest">01 //</span>
+
+        <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">ABOUT ME</h2>
+
+        <div class="flex-grow h-[1px] bg-gradient-to-r from-neonCyan/40 to-transparent ml-4"></div>
+
+      </div>
+
+
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+
+        <!-- Photo Space with Futuristic Frame -->
+
+        <div class="lg:col-span-5 flex justify-center">
+
+          <div class="relative w-full max-w-sm group">
+
+            <!-- Cyber Neon Frame Accents -->
+
+            <div class="absolute -top-3 -left-3 w-8 h-8 border-t-2 border-l-2 border-neonCyan"></div>
+
+            <div class="absolute -top-3 -right-3 w-8 h-8 border-t-2 border-r-2 border-neonPurple"></div>
+
+            <div class="absolute -bottom-3 -left-3 w-8 h-8 border-b-2 border-l-2 border-neonPink"></div>
+
+            <div class="absolute -bottom-3 -right-3 w-8 h-8 border-b-2 border-r-2 border-neonCyan"></div>
+
+            
+
+            <div class="relative rounded-2xl overflow-hidden glass-card border border-cyan-500/30 scanline-box aspect-[4/5] flex items-center justify-center bg-gradient-to-b from-slate-900 to-black">
+
+              <!-- Photograph / Image Element with placeholder fallback -->
+
+              <img 
+
+                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=700&q=80" 
+
+                alt="Divyanshi Sinha - 4th Year B.Tech Computer Science Student"
+
+                class="w-full h-full object-cover grayscale contrast-125 group-hover:grayscale-0 group-hover:scale-105 transition duration-500"
+
+                onerror="this.onerror=null; this.src='https://placehold.co/600x750/090d16/00f2fe?text=Divyanshi+Sinha+BTech+CSE';"
+
+              />
+
+              
+
+              <!-- Cyber Badge Overlay -->
+
+              <div class="absolute bottom-4 left-4 right-4 p-3 rounded-xl bg-black/85 backdrop-blur-md border border-white/15 z-30">
+
+                <div class="flex items-center justify-between">
+
+                  <div>
+
+                    <div class="text-xs font-bold text-white font-heading">DIVYANSHI SINHA</div>
+
+                    <div class="text-[10px] text-cyan-400 font-mono">B.Tech CSE Class of 2027</div>
+
+                  </div>
+
+                  <div class="px-2 py-1 rounded bg-cyan-500/20 text-neonCyan text-[10px] font-mono border border-cyan-500/30">
+
+                    ID: 23CSAI057
+
+                  </div>
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- About Description & Details Grid -->
+
+        <div class="lg:col-span-7 space-y-6">
+
+          <h3 class="text-2xl font-bold font-heading text-white">
+
+            Transforming Complex Computational Theory into High-Velocity Software.
+
+          </h3>
+
+          
+
+          <p class="text-slate-300 text-sm sm:text-base leading-relaxed font-sans">
+
+            Hello! I am a final-year (4th year) <strong class="text-cyan-300 font-normal">Computer Science and Engineering</strong> undergraduate student. My academic journey has been centered on the intersection of scalable backend architectures, high-performance distributed systems, and low-latency full-stack apps.
+
+          </p>
+
+
+
+          <p class="text-slate-400 text-sm leading-relaxed font-sans">
+
+            Over the past four years, I have balanced rigorous academics with real-world builds: authoring distributed microservices, architecting modern cloud applications with Docker and AWS, solving 600+ algorithmic puzzles, and serving as the Technical Lead for our campus Open Source Society.
+
+          </p>
+
+
+
+          <!-- Attribute Grid -->
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+
+            <div class="p-4 rounded-xl glass-card border border-white/5">
+
+              <span class="text-xs text-cyan-400 font-mono block uppercase">University</span>
+
+              <span class="text-sm font-semibold text-white mt-1 block">National Institute of Technology</span>
+
+              <span class="text-[11px] text-slate-400">Department of Computer Science & Eng.</span>
+
+            </div>
+
+
+
+            <div class="p-4 rounded-xl glass-card border border-white/5">
+
+              <span class="text-xs text-purple-400 font-mono block uppercase">Academic Standing</span>
+
+              <span class="text-sm font-semibold text-white mt-1 block">CGPA: 8.94 / 10.0</span>
+
+              <span class="text-[11px] text-slate-400">Ranked top 5% in graduating cohort</span>
+
+            </div>
+
+
+
+            <div class="p-4 rounded-xl glass-card border border-white/5">
+
+              <span class="text-xs text-pink-400 font-mono block uppercase">Primary Focus</span>
+
+              <span class="text-sm font-semibold text-white mt-1 block">Backend & Distributed Systems</span>
+
+              <span class="text-[11px] text-slate-400">APIs, Microservices, Concurrency, Raft</span>
+
+            </div>
+
+
+
+            <div class="p-4 rounded-xl glass-card border border-white/5">
+
+              <span class="text-xs text-emerald-400 font-mono block uppercase">Availability</span>
+
+              <span class="text-sm font-semibold text-white mt-1 block">Immediate Full-Time / SDE</span>
+
+              <span class="text-[11px] text-slate-400">Open to Relocation & Remote</span>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- Quick Skills Ticker -->
+
+          <div class="flex flex-wrap items-center gap-2 pt-2">
+
+            <span class="text-xs text-slate-400 font-mono mr-2">Core Competencies:</span>
+
+            <span class="px-2.5 py-1 rounded-md bg-cyan-950/40 border border-cyan-500/30 text-neonCyan text-xs font-mono">Algorithms</span>
+
+            <span class="px-2.5 py-1 rounded-md bg-purple-950/40 border border-purple-500/30 text-neonPurple text-xs font-mono">System Design</span>
+
+            <span class="px-2.5 py-1 rounded-md bg-pink-950/40 border border-pink-500/30 text-neonPink text-xs font-mono">Microservices</span>
+
+            <span class="px-2.5 py-1 rounded-md bg-emerald-950/40 border border-emerald-500/30 text-emerald-400 text-xs font-mono">Cloud Native</span>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+
+    <section id="techstack" class="reveal-elem scroll-mt-24">
+
+      <div class="flex items-center gap-3 mb-10">
+
+        <span class="text-neonPurple font-mono text-sm tracking-widest">02 //</span>
+
+        <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">TECH STACK</h2>
+
+        <div class="flex-grow h-[1px] bg-gradient-to-r from-neonPurple/40 to-transparent ml-4"></div>
+
+      </div>
+
+
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+        
+
+        <!-- Category 1: Languages -->
+
+        <div class="glass-card rounded-2xl p-6 border border-white/10 hover:border-cyan-400/50 transition duration-300 flex flex-col justify-between group">
+
+          <div>
+
+            <div class="w-10 h-10 rounded-xl bg-cyan-950/50 border border-cyan-500/30 flex items-center justify-center text-neonCyan mb-4 group-hover:scale-110 transition">
+
+              <i class="fa-solid fa-code text-lg"></i>
+
+            </div>
+
+            <h3 class="text-lg font-heading font-bold text-white mb-2">Languages</h3>
+
+            <p class="text-xs text-slate-400 mb-4">Core languages used for systems programming, competitive coding & apps.</p>
+
+            <div class="flex flex-wrap gap-2">
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">C++ (STL)</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Java</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Python 3</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">TypeScript</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">SQL</span>
+
+            </div>
+
+          </div>
+
+          <div class="mt-6 pt-3 border-t border-white/5 text-[11px] font-mono text-cyan-400 flex items-center justify-between">
+
+            <span>DSA & Algorithmic coding</span>
+
+            <i class="fa-solid fa-arrow-trend-up"></i>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Category 2: Web & Frameworks -->
+
+        <div class="glass-card rounded-2xl p-6 border border-white/10 hover:border-purple-400/50 transition duration-300 flex flex-col justify-between group">
+
+          <div>
+
+            <div class="w-10 h-10 rounded-xl bg-purple-950/50 border border-purple-500/30 flex items-center justify-center text-neonPurple mb-4 group-hover:scale-110 transition">
+
+              <i class="fa-solid fa-layer-group text-lg"></i>
+
+            </div>
+
+            <h3 class="text-lg font-heading font-bold text-white mb-2">Full-Stack & Web</h3>
+
+            <p class="text-xs text-slate-400 mb-4">Modern reactive UI frameworks, SSR engines, and REST/gRPC backend servers.</p>
+
+            <div class="flex flex-wrap gap-2">
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">React.js</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Next.js 14</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Node.js</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Express</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Tailwind CSS</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">FastAPI</span>
+
+            </div>
+
+          </div>
+
+          <div class="mt-6 pt-3 border-t border-white/5 text-[11px] font-mono text-purple-400 flex items-center justify-between">
+
+            <span>Interactive reactive web</span>
+
+            <i class="fa-solid fa-network-wired"></i>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Category 3: Cloud & Databases -->
+
+        <div class="glass-card rounded-2xl p-6 border border-white/10 hover:border-pink-400/50 transition duration-300 flex flex-col justify-between group">
+
+          <div>
+
+            <div class="w-10 h-10 rounded-xl bg-pink-950/50 border border-pink-500/30 flex items-center justify-center text-neonPink mb-4 group-hover:scale-110 transition">
+
+              <i class="fa-solid fa-database text-lg"></i>
+
+            </div>
+
+            <h3 class="text-lg font-heading font-bold text-white mb-2">Cloud & Data</h3>
+
+            <p class="text-xs text-slate-400 mb-4">Scalable relational and document stores, cache clusters, and containerization.</p>
+
+            <div class="flex flex-wrap gap-2">
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">PostgreSQL</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">MongoDB</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Redis</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Docker</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">AWS (EC2, S3)</span>
+
+            </div>
+
+          </div>
+
+          <div class="mt-6 pt-3 border-t border-white/5 text-[11px] font-mono text-pink-400 flex items-center justify-between">
+
+            <span>High availability & caching</span>
+
+            <i class="fa-solid fa-cloud"></i>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Category 4: CS Foundations & Tools -->
+
+        <div class="glass-card rounded-2xl p-6 border border-white/10 hover:border-emerald-400/50 transition duration-300 flex flex-col justify-between group">
+
+          <div>
+
+            <div class="w-10 h-10 rounded-xl bg-emerald-950/50 border border-emerald-500/30 flex items-center justify-center text-emerald-400 mb-4 group-hover:scale-110 transition">
+
+              <i class="fa-solid fa-microchip text-lg"></i>
+
+            </div>
+
+            <h3 class="text-lg font-heading font-bold text-white mb-2">Core CS & Tools</h3>
+
+            <p class="text-xs text-slate-400 mb-4">Undergraduate CS academic rigor and command line power tools.</p>
+
+            <div class="flex flex-wrap gap-2">
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Git / GitHub</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Linux / Bash</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Operating Systems</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">Computer Networks</span>
+
+              <span class="px-2.5 py-1 rounded-lg bg-black/60 border border-white/10 text-xs text-slate-200">System Design</span>
+
+            </div>
+
+          </div>
+
+          <div class="mt-6 pt-3 border-t border-white/5 text-[11px] font-mono text-emerald-400 flex items-center justify-between">
+
+            <span>Strong foundations</span>
+
+            <i class="fa-solid fa-terminal"></i>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+    </section>
+
+
+
+    <section id="projects" class="reveal-elem scroll-mt-24">
+
+      <div class="flex items-center gap-3 mb-10">
+
+        <span class="text-neonPink font-mono text-sm tracking-widest">03 //</span>
+
+        <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">FEATURED PROJECTS</h2>
+
+        <div class="flex-grow h-[1px] bg-gradient-to-r from-neonPink/40 to-transparent ml-4"></div>
+
+      </div>
+
+
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+        
+
+        <!-- Project 1: Distributed Task Scheduler (Capstone) -->
+
+        <div class="glass-card rounded-2xl border border-white/10 hover:border-cyan-400/60 p-6 sm:p-7 flex flex-col justify-between group transition duration-300 relative overflow-hidden">
+
+          <div class="absolute top-0 right-0 w-32 h-32 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          
+
+          <div>
+
+            <div class="flex items-center justify-between mb-4">
+
+              <span class="px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-neonCyan text-[11px] font-mono uppercase tracking-wider">
+
+                Final Year Capstone
+
+              </span>
+
+              <div class="flex items-center gap-3 text-slate-400">
+
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-neonCyan transition" title="GitHub Source">
+
+                  <i class="fa-brands fa-github text-lg"></i>
+
+                </a>
+
+                <a href="#" class="hover:text-neonCyan transition" title="Live System Dashboard">
+
+                  <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+
+                </a>
+
+              </div>
+
+            </div>
+
+
+
+            <h3 class="text-xl font-heading font-bold text-white group-hover:text-neonCyan transition mb-2">
+
+              Krona: Distributed Cron & Event Scheduler
+
+            </h3>
+
+            
+
+            <p class="text-sm text-slate-300 leading-relaxed font-sans mb-5">
+
+              Engineered a fault-tolerant, high-throughput distributed task scheduler capable of dispatching 10,000+ jobs/sec with sub-second latency guarantees using Raft consensus for leader election and dynamic failover recovery.
+
+            </p>
+
+
+
+            <ul class="text-xs text-slate-400 space-y-1.5 mb-6 font-mono">
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-cyan-400 text-[10px]"></i>
+
+                Raft-based consensus prevents split-brain scenarios.
+
+              </li>
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-cyan-400 text-[10px]"></i>
+
+                Redis Sorted Sets (ZSET) for efficient epoch queueing.
+
+              </li>
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-cyan-400 text-[10px]"></i>
+
+                Built-in exponential backoff and dead-letter queues.
+
+              </li>
+
+            </ul>
+
+          </div>
+
+
+
+          <div>
+
+            <div class="flex flex-wrap gap-2 pt-4 border-t border-white/10">
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-cyan-300 border border-white/5">Go</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-cyan-300 border border-white/5">Redis</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-cyan-300 border border-white/5">gRPC</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-cyan-300 border border-white/5">Docker</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-cyan-300 border border-white/5">Prometheus</span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Project 2: Realtime Cloud Code IDE -->
+
+        <div class="glass-card rounded-2xl border border-white/10 hover:border-purple-400/60 p-6 sm:p-7 flex flex-col justify-between group transition duration-300 relative overflow-hidden">
+
+          <div class="absolute top-0 right-0 w-32 h-32 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+
+
+          <div>
+
+            <div class="flex items-center justify-between mb-4">
+
+              <span class="px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-neonPurple text-[11px] font-mono uppercase tracking-wider">
+
+                Full-Stack System
+
+              </span>
+
+              <div class="flex items-center gap-3 text-slate-400">
+
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-neonPurple transition" title="GitHub Source">
+
+                  <i class="fa-brands fa-github text-lg"></i>
+
+                </a>
+
+                <a href="#" class="hover:text-neonPurple transition" title="Live IDE">
+
+                  <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+
+                </a>
+
+              </div>
+
+            </div>
+
+
+
+            <h3 class="text-xl font-heading font-bold text-white group-hover:text-neonPurple transition mb-2">
+
+              SyncCode: Collaborative Sandboxed IDE
+
+            </h3>
+
+            
+
+            <p class="text-sm text-slate-300 leading-relaxed font-sans mb-5">
+
+              Browser-based multi-user code workspace featuring real-time operational transformation (OT) via WebSockets and remote sandboxed code compilation for C++, Java, and Python inside isolated ephemeral Docker containers.
+
+            </p>
+
+
+
+            <ul class="text-xs text-slate-400 space-y-1.5 mb-6 font-mono">
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-purple-400 text-[10px]"></i>
+
+                Sub-50ms peer synchronization using CRDT principles.
+
+              </li>
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-purple-400 text-[10px]"></i>
+
+                Isolated Linux cgroups & namespaces to prevent exploit execution.
+
+              </li>
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-purple-400 text-[10px]"></i>
+
+                Integrated Monaco Editor with syntax highlighting & AST hints.
+
+              </li>
+
+            </ul>
+
+          </div>
+
+
+
+          <div>
+
+            <div class="flex flex-wrap gap-2 pt-4 border-t border-white/10">
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-purple-300 border border-white/5">React</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-purple-300 border border-white/5">Node.js</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-purple-300 border border-white/5">WebSockets</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-purple-300 border border-white/5">Docker API</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-purple-300 border border-white/5">Tailwind</span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Project 3: AI Diagnostic Assist -->
+
+        <div class="glass-card rounded-2xl border border-white/10 hover:border-pink-400/60 p-6 sm:p-7 flex flex-col justify-between group transition duration-300 relative overflow-hidden">
+
+          <div class="absolute top-0 right-0 w-32 h-32 bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+
+
+          <div>
+
+            <div class="flex items-center justify-between mb-4">
+
+              <span class="px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/30 text-neonPink text-[11px] font-mono uppercase tracking-wider">
+
+                AI & Healthcare
+
+              </span>
+
+              <div class="flex items-center gap-3 text-slate-400">
+
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-neonPink transition" title="GitHub Source">
+
+                  <i class="fa-brands fa-github text-lg"></i>
+
+                </a>
+
+                <a href="#" class="hover:text-neonPink transition" title="Research Demo">
+
+                  <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+
+                </a>
+
+              </div>
+
+            </div>
+
+
+
+            <h3 class="text-xl font-heading font-bold text-white group-hover:text-neonPink transition mb-2">
+
+              NeuroScan: AI Chest Pathology Classifier
+
+            </h3>
+
+            
+
+            <p class="text-sm text-slate-300 leading-relaxed font-sans mb-5">
+
+              Deep convolutional neural network model leveraging transfer learning (DenseNet-121) on 100k+ NIH X-ray records. Features Grad-CAM visual heatmaps highlighting suspicious pulmonary regions for clinical radiologist validation.
+
+            </p>
+
+
+
+            <ul class="text-xs text-slate-400 space-y-1.5 mb-6 font-mono">
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-pink-400 text-[10px]"></i>
+
+                Achieved 0.91 AUC score across 14 distinct pathological classes.
+
+              </li>
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-pink-400 text-[10px]"></i>
+
+                FastAPI microservice inference pipeline served with ONNX Runtime.
+
+              </li>
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-pink-400 text-[10px]"></i>
+
+                Grad-CAM visualizer for explainable AI reasoning.
+
+              </li>
+
+            </ul>
+
+          </div>
+
+
+
+          <div>
+
+            <div class="flex flex-wrap gap-2 pt-4 border-t border-white/10">
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-pink-300 border border-white/5">PyTorch</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-pink-300 border border-white/5">FastAPI</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-pink-300 border border-white/5">OpenCV</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-pink-300 border border-white/5">NumPy</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-pink-300 border border-white/5">AWS S3</span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Project 4: Decentralized Voting Protocol -->
+
+        <div class="glass-card rounded-2xl border border-white/10 hover:border-emerald-400/60 p-6 sm:p-7 flex flex-col justify-between group transition duration-300 relative overflow-hidden">
+
+          <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+
+
+          <div>
+
+            <div class="flex items-center justify-between mb-4">
+
+              <span class="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-[11px] font-mono uppercase tracking-wider">
+
+                Web3 & Cryptography
+
+              </span>
+
+              <div class="flex items-center gap-3 text-slate-400">
+
+                <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="hover:text-emerald-400 transition" title="GitHub Source">
+
+                  <i class="fa-brands fa-github text-lg"></i>
+
+                </a>
+
+                <a href="#" class="hover:text-emerald-400 transition" title="Verified Contract">
+
+                  <i class="fa-solid fa-arrow-up-right-from-square text-sm"></i>
+
+                </a>
+
+              </div>
+
+            </div>
+
+
+
+            <h3 class="text-xl font-heading font-bold text-white group-hover:text-emerald-400 transition mb-2">
+
+              Votex: Zero-Knowledge Student Ballot DApp
+
+            </h3>
+
+            
+
+            <p class="text-sm text-slate-300 leading-relaxed font-sans mb-5">
+
+              Tamper-evident decentralized collegiate election framework leveraging Ethereum smart contracts and zk-SNARK cryptographic proofs to guarantee complete voter anonymity while preventing double-voting.
+
+            </p>
+
+
+
+            <ul class="text-xs text-slate-400 space-y-1.5 mb-6 font-mono">
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-emerald-400 text-[10px]"></i>
+
+                Deployed on Polygon testnet with optimized gas consumption.
+
+              </li>
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-emerald-400 text-[10px]"></i>
+
+                Circom circuits for anonymous voter identity membership verification.
+
+              </li>
+
+              <li class="flex items-center gap-2">
+
+                <i class="fa-solid fa-check text-emerald-400 text-[10px]"></i>
+
+                MetaMask / Web3Auth integration for student institutional single-sign-on.
+
+              </li>
+
+            </ul>
+
+          </div>
+
+
+
+          <div>
+
+            <div class="flex flex-wrap gap-2 pt-4 border-t border-white/10">
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-emerald-300 border border-white/5">Solidity</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-emerald-300 border border-white/5">zk-SNARKs</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-emerald-300 border border-white/5">Hardhat</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-emerald-300 border border-white/5">Ethers.js</span>
+
+              <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-black/60 text-emerald-300 border border-white/5">Next.js</span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+    </section>
+
+
+
+    <section id="education" class="reveal-elem scroll-mt-24">
+
+      <div class="flex items-center gap-3 mb-10">
+
+        <span class="text-neonCyan font-mono text-sm tracking-widest">04 //</span>
+
+        <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">ACADEMIC JOURNEY</h2>
+
+        <div class="flex-grow h-[1px] bg-gradient-to-r from-neonCyan/40 to-transparent ml-4"></div>
+
+      </div>
+
+
+
+      <div class="space-y-6 relative before:absolute before:inset-0 before:left-3 md:before:left-1/2 before:w-[2px] before:bg-white/10 before:-translate-x-1/2">
+
+        
+
+        <!-- Timeline Item 1: B.Tech CSE -->
+
+        <div class="relative flex flex-col md:flex-row items-center justify-between gap-6 group">
+
+          <div class="w-full md:w-[46%] order-2 md:order-1 text-left md:text-right">
+
+            <div class="glass-card rounded-2xl p-6 border border-cyan-500/40 group-hover:shadow-neon-cyan transition duration-300">
+
+              <div class="inline-block px-2.5 py-1 rounded bg-cyan-500/20 text-neonCyan font-mono text-xs font-semibold mb-2">
+
+                2022 — 2026 (CURRENT: 4TH YEAR)
+
+              </div>
+
+              <h3 class="text-xl font-heading font-bold text-white">B.Tech in Computer Science & Engineering</h3>
+
+              <p class="text-cyan-300 text-xs font-mono mb-2">National Institute of Technology</p>
+
+              <p class="text-slate-300 text-sm font-sans mb-3">
+
+                Comprehensive curriculum covering data structures, low-level architecture, network security, and AI. Serving as Undergraduate Peer Mentor for juniors in Data Structures & C++.
+
+              </p>
+
+              <div class="flex flex-wrap gap-2 md:justify-end">
+
+                <span class="px-2 py-0.5 rounded bg-white/5 text-cyan-300 font-mono text-xs border border-white/5">CGPA: 8.94 / 10.0</span>
+
+                <span class="px-2 py-0.5 rounded bg-white/5 text-slate-300 font-mono text-xs border border-white/5">Top 5% Cohort</span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="absolute left-3 md:left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-black border-2 border-neonCyan flex items-center justify-center z-20 group-hover:scale-125 transition shadow-neon-cyan">
+
+            <div class="w-2 h-2 rounded-full bg-neonCyan"></div>
+
+          </div>
+
+
+
+          <div class="w-full md:w-[46%] order-3 md:order-2 hidden md:block">
+
+            <div class="text-xs text-slate-400 font-mono p-4 rounded-xl border border-white/5 bg-black/40">
+
+              <span class="text-cyan-400">&bull; Core Courses Completed:</span> Advanced Data Structures, Database Systems, Computer Networks, Theory of Computation, Compiler Design, Distributed Computing.
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Timeline Item 2: Class 12 / Senior Secondary -->
+
+        <div class="relative flex flex-col md:flex-row items-center justify-between gap-6 group">
+
+          <div class="w-full md:w-[46%] order-3 md:order-1 hidden md:block">
+
+            <div class="text-xs text-slate-400 font-mono p-4 rounded-xl border border-white/5 bg-black/40 text-right">
+
+              <span class="text-purple-400">&bull; Honors:</span> School Subject Topper in Mathematics & Computer Science. National Science Olympiad Gold Medalist.
+
+            </div>
+
+          </div>
+
+
+
+          <div class="absolute left-3 md:left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-black border-2 border-neonPurple flex items-center justify-center z-20 group-hover:scale-125 transition shadow-neon-purple">
+
+            <div class="w-2 h-2 rounded-full bg-neonPurple"></div>
+
+          </div>
+
+
+
+          <div class="w-full md:w-[46%] order-2 md:order-2 text-left">
+
+            <div class="glass-card rounded-2xl p-6 border border-white/10 group-hover:border-neonPurple transition duration-300">
+
+              <div class="inline-block px-2.5 py-1 rounded bg-purple-500/20 text-neonPurple font-mono text-xs font-semibold mb-2">
+
+                2020 — 2022
+
+              </div>
+
+              <h3 class="text-xl font-heading font-bold text-white">Higher Secondary (Class XII) - PCM & CS</h3>
+
+              <p class="text-purple-300 text-xs font-mono mb-2">Delhi Public School, R.K. Puram</p>
+
+              <p class="text-slate-300 text-sm font-sans mb-3">
+
+                Physics, Chemistry, Pure Mathematics, and Computer Science (Python & SQL foundations).
+
+              </p>
+
+              <div class="flex flex-wrap gap-2">
+
+                <span class="px-2 py-0.5 rounded bg-white/5 text-neonPurple font-mono text-xs border border-white/5">Grade: 96.2%</span>
+
+                <span class="px-2 py-0.5 rounded bg-white/5 text-slate-300 font-mono text-xs border border-white/5">CBSE Merit Certificate</span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Timeline Item 3: Secondary School Class 10 -->
+
+        <div class="relative flex flex-col md:flex-row items-center justify-between gap-6 group">
+
+          <div class="w-full md:w-[46%] order-2 md:order-1 text-left md:text-right">
+
+            <div class="glass-card rounded-2xl p-6 border border-white/10 group-hover:border-neonGreen transition duration-300">
+
+              <div class="inline-block px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 font-mono text-xs font-semibold mb-2">
+
+                2019 — 2020
+
+              </div>
+
+              <h3 class="text-xl font-heading font-bold text-white">Secondary School Examination (Class X)</h3>
+
+              <p class="text-emerald-300 text-xs font-mono mb-2">Delhi Public School</p>
+
+              <p class="text-slate-300 text-sm font-sans mb-3">
+
+                Foundation in Mathematics, Sciences, and introductory programming logic.
+
+              </p>
+
+              <div class="flex flex-wrap gap-2 md:justify-end">
+
+                <span class="px-2 py-0.5 rounded bg-white/5 text-emerald-400 font-mono text-xs border border-white/5">Grade: 95.8%</span>
+
+                <span class="px-2 py-0.5 rounded bg-white/5 text-slate-300 font-mono text-xs border border-white/5">10/10 CGPA</span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+
+          <div class="absolute left-3 md:left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-black border-2 border-emerald-400 flex items-center justify-center z-20 group-hover:scale-125 transition">
+
+            <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+
+          </div>
+
+
+
+          <div class="w-full md:w-[46%] order-3 md:order-2 hidden md:block">
+
+            <div class="text-xs text-slate-400 font-mono p-4 rounded-xl border border-white/5 bg-black/40">
+
+              <span class="text-emerald-400">&bull; Core Focus:</span> STEM Aptitude, Geometry, Information Technology.
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+    </section>
+
+
+
+    <section id="certificates" class="reveal-elem scroll-mt-24">
+
+      <div class="flex items-center gap-3 mb-10">
+
+        <span class="text-emerald-400 font-mono text-sm tracking-widest">05 //</span>
+
+        <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">CERTIFICATIONS & HONORS</h2>
+
+        <div class="flex-grow h-[1px] bg-gradient-to-r from-emerald-400/40 to-transparent ml-4"></div>
+
+      </div>
+
+
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        
+
+        <!-- Cert 1: AWS -->
+
+        <div class="glass-card rounded-2xl p-6 border border-white/10 hover:border-amber-400/60 transition group flex flex-col justify-between">
+
+          <div>
+
+            <div class="flex items-center justify-between mb-4">
+
+              <i class="fa-brands fa-aws text-3xl text-amber-400"></i>
+
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">VERIFIED</span>
+
+            </div>
+
+            <h3 class="text-lg font-heading font-bold text-white group-hover:text-amber-300 transition">
+
+              AWS Certified Solutions Architect – Associate
+
+            </h3>
+
+            <p class="text-xs text-slate-400 font-sans mt-2 mb-4">
+
+              Amazon Web Services &bull; Validated mastery in VPC architectures, IAM security, S3 storage tiers, EC2 auto-scaling, and ECS clusters.
+
+            </p>
+
+          </div>
+
+          <div class="pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-slate-400">
+
+            <span>Issued: 2024</span>
+
+            <span class="text-amber-400">ID: AWS-994102</span>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Cert 2: Meta Full Stack -->
+
+        <div class="glass-card rounded-2xl p-6 border border-white/10 hover:border-cyan-400/60 transition group flex flex-col justify-between">
+
+          <div>
+
+            <div class="flex items-center justify-between mb-4">
+
+              <i class="fa-brands fa-meta text-2xl text-cyan-400"></i>
+
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-500/10 text-neonCyan border border-cyan-500/20">PROFESSIONAL</span>
+
+            </div>
+
+            <h3 class="text-lg font-heading font-bold text-white group-hover:text-neonCyan transition">
+
+              Meta Professional Full-Stack Software Engineer
+
+            </h3>
+
+            <p class="text-xs text-slate-400 font-sans mt-2 mb-4">
+
+              Meta &bull; 9-course specialization spanning advanced React design systems, Django APIs, SQL database optimization, and CI/CD pipelines.
+
+            </p>
+
+          </div>
+
+          <div class="pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-slate-400">
+
+            <span>Issued: 2023</span>
+
+            <span class="text-cyan-400">Coursera Verified</span>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Cert 3: Hackathon Winner -->
+
+        <div class="glass-card rounded-2xl p-6 border border-white/10 hover:border-neonPink/60 transition group flex flex-col justify-between">
+
+          <div>
+
+            <div class="flex items-center justify-between mb-4">
+
+              <i class="fa-solid fa-trophy text-2xl text-neonPink"></i>
+
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-pink-500/10 text-neonPink border border-pink-500/20">1ST PLACE</span>
+
+            </div>
+
+            <h3 class="text-lg font-heading font-bold text-white group-hover:text-neonPink transition">
+
+              Smart India Hackathon (SIH) Finalist & Winner
+
+            </h3>
+
+            <p class="text-xs text-slate-400 font-sans mt-2 mb-4">
+
+              Ministry of Education &bull; Built an offline-first decentralized emergency supply chain portal using mesh networking over 36-hour sprint.
+
+            </p>
+
+          </div>
+
+          <div class="pt-3 border-t border-white/5 flex items-center justify-between text-xs font-mono text-slate-400">
+
+            <span>National Level</span>
+
+            <span class="text-neonPink">Team Lead</span>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+    </section>
+
+
+
+    <section id="contact" class="reveal-elem scroll-mt-24">
+
+      <div class="flex items-center gap-3 mb-10">
+
+        <span class="text-neonCyan font-mono text-sm tracking-widest">06 //</span>
+
+        <h2 class="font-heading text-3xl sm:text-4xl font-extrabold text-white tracking-tight">CONTACT & INITIATE</h2>
+
+        <div class="flex-grow h-[1px] bg-gradient-to-r from-neonCyan/40 to-transparent ml-4"></div>
+
+      </div>
+
+
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
+
+        
+
+        <!-- Left Contact Context -->
+
+        <div class="lg:col-span-5 space-y-5">
+
+          <h3 class="text-2xl font-bold font-heading text-white">Let's build something remarkable.</h3>
+
+          <p class="text-slate-400 text-sm font-sans leading-relaxed">
+
+            I am currently in my final year and actively interviewing for <span class="text-cyan-300">Software Engineer 1 (SDE 1)</span>, Graduate Engineer Trainee, or Full-Stack roles starting Spring/Summer 2026. Feel free to ping for collaborations, open source ideas, or a quick coffee chat!
+
+          </p>
+
+
+
+          <div class="space-y-3 pt-2">
+
+            <div class="flex items-center gap-3 text-sm text-slate-300">
+
+              <div class="w-8 h-8 rounded-lg bg-cyan-950/40 border border-cyan-500/30 flex items-center justify-center text-neonCyan">
+
+                <i class="fa-solid fa-location-dot"></i>
+
+              </div>
+
+              <span>Bengaluru / Delhi NCR / Remote (India & Global)</span>
+
+            </div>
+
+            
+
+            <div class="flex items-center gap-3 text-sm text-slate-300">
+
+              <div class="w-8 h-8 rounded-lg bg-purple-950/40 border border-purple-500/30 flex items-center justify-center text-neonPurple">
+
+                <i class="fa-solid fa-envelope"></i>
+
+              </div>
+
+              <span class="font-mono">alex.carter.cse@gmail.com</span>
+
+            </div>
+
+
+
+            <div class="flex items-center gap-3 text-sm text-slate-300">
+
+              <div class="w-8 h-8 rounded-lg bg-emerald-950/40 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+
+                <i class="fa-solid fa-graduation-cap"></i>
+
+              </div>
+
+              <span>Batch of 2026 &bull; Computer Science</span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- Right Glass Contact Form -->
+
+        <div class="lg:col-span-7">
+
+          <div class="glass-card rounded-2xl p-6 sm:p-8 border border-white/10">
+
+            <form id="portfolio-contact-form" class="space-y-4">
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+                <div>
+
+                  <label class="block text-xs font-mono text-slate-300 uppercase mb-2" for="form-name">Your Name</label>
+
+                  <input 
+
+                    type="text" 
+
+                    id="form-name" 
+
+                    required 
+
+                    placeholder="Jane Doe" 
+
+                    class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-neonCyan transition font-mono placeholder:text-slate-600"
+
+                  />
+
+                </div>
+
+                <div>
+
+                  <label class="block text-xs font-mono text-slate-300 uppercase mb-2" for="form-email">Your Email</label>
+
+                  <input 
+
+                    type="email" 
+
+                    id="form-email" 
+
+                    required 
+
+                    placeholder="jane@company.com" 
+
+                    class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-neonCyan transition font-mono placeholder:text-slate-600"
+
+                  />
+
+                </div>
+
+              </div>
+
+
+
+              <div>
+
+                <label class="block text-xs font-mono text-slate-300 uppercase mb-2" for="form-subject">Subject / Opportunity</label>
+
+                <input 
+
+                  type="text" 
+
+                  id="form-subject" 
+
+                  required 
+
+                  placeholder="SDE 1 Role / Project Discussion" 
+
+                  class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-neonCyan transition font-mono placeholder:text-slate-600"
+
+                />
+
+              </div>
+
+
+
+              <div>
+
+                <label class="block text-xs font-mono text-slate-300 uppercase mb-2" for="form-message">Message</label>
+
+                <textarea 
+
+                  id="form-message" 
+
+                  rows="4" 
+
+                  required 
+
+                  placeholder="Hi Alex, we came across your work on distributed systems..." 
+
+                  class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-neonCyan transition font-mono placeholder:text-slate-600 resize-none"
+
+                ></textarea>
+
+              </div>
+
+
+
+              <button 
+
+                type="submit" 
+
+                id="submit-btn" 
+
+                class="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-neonCyan via-blue-500 to-neonPurple text-black font-heading font-bold text-sm tracking-wider uppercase hover:opacity-95 shadow-[0_0_25px_rgba(0,242,254,0.4)] transition duration-300 flex items-center justify-center gap-2"
+
+              >
+
+                <span>TRANSMIT MESSAGE</span>
+
+                <i class="fa-solid fa-paper-plane text-xs"></i>
+
+              </button>
+
+
+
+              <!-- Feedback message container -->
+
+              <div id="form-feedback" class="hidden p-3 rounded-xl text-center text-xs font-mono"></div>
+
+            </form>
+
+          </div>
+
+        </div>
+
+
+
+      </div>
+
+    </section>
+
+
+
+    <section class="reveal-elem pt-10 border-t border-white/10">
+
+      <div class="text-center mb-8">
+
+        <h3 class="font-heading text-xl font-bold text-white uppercase tracking-wider">DEVELOPER PROFILES & PLATFORMS</h3>
+
+        <p class="text-xs text-slate-400 font-mono mt-1">Connect with me on algorithmic platforms and social repositories</p>
+
+      </div>
+
+
+
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+        
+
+        <!-- LinkedIn -->
+
+        <a 
+
+          href="https://linkedin.com" 
+
+          target="_blank" 
+
+          rel="noopener noreferrer" 
+
+          class="glass-card rounded-xl p-4 border border-blue-500/20 hover:border-blue-400 hover:shadow-[0_0_20px_rgba(0,119,181,0.4)] transition flex flex-col items-center text-center group"
+
+        >
+
+          <div class="w-12 h-12 rounded-xl bg-[#0077b5]/10 border border-[#0077b5]/30 flex items-center justify-center text-[#0077b5] group-hover:scale-110 transition mb-3">
+
+            <i class="fa-brands fa-linkedin-in text-xl"></i>
+
+          </div>
+
+          <span class="text-sm font-heading font-bold text-white">LinkedIn</span>
+
+          <span class="text-xs text-slate-400 font-mono mt-0.5">/in/alex-carter-cse</span>
+
+          <span class="mt-2 text-[10px] text-blue-400 font-mono">1,200+ Connections &rarr;</span>
+
+        </a>
+
+
+
+        <!-- GitHub -->
+
+        <a 
+
+          href="https://github.com" 
+
+          target="_blank" 
+
+          rel="noopener noreferrer" 
+
+          class="glass-card rounded-xl p-4 border border-white/10 hover:border-white/40 hover:shadow-[0_0_20px_rgba(255,255,255,0.2)] transition flex flex-col items-center text-center group"
+
+        >
+
+          <div class="w-12 h-12 rounded-xl bg-white/5 border border-white/20 flex items-center justify-center text-white group-hover:scale-110 transition mb-3">
+
+            <i class="fa-brands fa-github text-2xl"></i>
+
+          </div>
+
+          <span class="text-sm font-heading font-bold text-white">GitHub</span>
+
+          <span class="text-xs text-slate-400 font-mono mt-0.5">@alexcarter-cse</span>
+
+          <span class="mt-2 text-[10px] text-slate-300 font-mono">500+ Contributions &rarr;</span>
+
+        </a>
+
+
+
+        <!-- LeetCode -->
+
+        <a 
+
+          href="https://leetcode.com" 
+
+          target="_blank" 
+
+          rel="noopener noreferrer" 
+
+          class="glass-card rounded-xl p-4 border border-amber-500/20 hover:border-amber-400 hover:shadow-[0_0_20px_rgba(245,158,11,0.4)] transition flex flex-col items-center text-center group"
+
+        >
+
+          <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 group-hover:scale-110 transition mb-3">
+
+            <i class="fa-solid fa-code text-xl"></i>
+
+          </div>
+
+          <span class="text-sm font-heading font-bold text-white">LeetCode</span>
+
+          <span class="text-xs text-slate-400 font-mono mt-0.5">@alex_coder26</span>
+
+          <span class="mt-2 text-[10px] text-amber-400 font-mono">Knight &bull; 1940+ Rating &rarr;</span>
+
+        </a>
+
+
+
+        <!-- HackerRank -->
+
+        <a 
+
+          href="https://hackerrank.com" 
+
+          target="_blank" 
+
+          rel="noopener noreferrer" 
+
+          class="glass-card rounded-xl p-4 border border-emerald-500/20 hover:border-emerald-400 hover:shadow-[0_0_20px_rgba(16,185,129,0.4)] transition flex flex-col items-center text-center group"
+
+        >
+
+          <div class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-emerald-400 group-hover:scale-110 transition mb-3">
+
+            <i class="fa-brands fa-hackerrank text-2xl"></i>
+
+          </div>
+
+          <span class="text-sm font-heading font-bold text-white">HackerRank</span>
+
+          <span class="text-xs text-slate-400 font-mono mt-0.5">@alexcarter_dev</span>
+
+          <span class="mt-2 text-[10px] text-emerald-400 font-mono">6★ Problem Solving &rarr;</span>
+
+        </a>
+
+
+
+      </div>
+
+    </section>
+
+
+
+    <!-- Footer Copyright Note -->
+
+    <footer class="text-center pt-6 pb-2 text-xs text-slate-500 font-mono">
+
+      <p>&copy; <span id="year-field">2026</span> Alex Carter. B.Tech (CSE) Final Year Portfolio.</p>
+
+      <p class="mt-1 text-[11px] text-slate-600">Built with HTML5, CSS3, Tailwind & Dense Particle Canvas Engine.</p>
+
+    </footer>
+
+
+
+  </main>
+
+
+
+  <nav class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-3 py-2 sm:px-5 sm:py-2.5 rounded-full bg-black/80 backdrop-blur-xl border border-white/20 shadow-[0_10px_35px_rgba(0,0,0,0.8)] flex items-center gap-1 sm:gap-2 max-w-[95vw] overflow-x-auto">
+
+    <a href="#hero" class="nav-item px-3 py-1.5 rounded-full text-xs font-mono text-slate-400 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5 active" data-target="hero">
+
+      <i class="fa-solid fa-house text-xs text-neonCyan"></i>
+
+      <span class="hidden md:inline">Home</span>
+
+    </a>
+
+    <a href="#about" class="nav-item px-3 py-1.5 rounded-full text-xs font-mono text-slate-400 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5" data-target="about">
+
+      <i class="fa-regular fa-user text-xs text-neonPurple"></i>
+
+      <span class="hidden md:inline">About</span>
+
+    </a>
+
+    <a href="#techstack" class="nav-item px-3 py-1.5 rounded-full text-xs font-mono text-slate-400 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5" data-target="techstack">
+
+      <i class="fa-solid fa-microchip text-xs text-neonPink"></i>
+
+      <span class="hidden md:inline">Stack</span>
+
+    </a>
+
+    <a href="#projects" class="nav-item px-3 py-1.5 rounded-full text-xs font-mono text-slate-400 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5" data-target="projects">
+
+      <i class="fa-solid fa-code-branch text-xs text-cyan-400"></i>
+
+      <span class="hidden md:inline">Projects</span>
+
+    </a>
+
+    <a href="#education" class="nav-item px-3 py-1.5 rounded-full text-xs font-mono text-slate-400 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5" data-target="education">
+
+      <i class="fa-solid fa-graduation-cap text-xs text-yellow-400"></i>
+
+      <span class="hidden md:inline">Education</span>
+
+    </a>
+
+    <a href="#certificates" class="nav-item px-3 py-1.5 rounded-full text-xs font-mono text-slate-400 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5" data-target="certificates">
+
+      <i class="fa-solid fa-award text-xs text-emerald-400"></i>
+
+      <span class="hidden md:inline">Certs</span>
+
+    </a>
+
+    <a href="#contact" class="nav-item px-3 py-1.5 rounded-full text-xs font-mono text-slate-400 hover:text-white hover:bg-white/10 transition flex items-center gap-1.5" data-target="contact">
+
+      <i class="fa-regular fa-paper-plane text-xs text-neonCyan"></i>
+
+      <span class="hidden md:inline">Contact</span>
+
+    </a>
+
+  </nav>
+
+
+
+  <script>
+
+    /* =================================================================
+
+       1. REAL-TIME HUD DIGITAL CLOCK (Top-Right)
+
+       ================================================================= */
+
+    function updateClock() {
+
+      const hudTime = document.getElementById('hud-time');
+
+      const hudDate = document.getElementById('hud-date');
+
+      const now = new Date();
+
+
+
+      const timeString = now.toLocaleTimeString('en-US', {
+
+        hour: '2-digit',
+
+        minute: '2-digit',
+
+        second: '2-digit',
+
+        hour12: true
+
+      });
+
+
+
+      const dateString = now.toLocaleDateString('en-US', {
+
+        weekday: 'short',
+
+        month: 'short',
+
+        day: 'numeric',
+
+        year: 'numeric'
+
+      });
+
+
+
+      if (hudTime) hudTime.textContent = timeString;
+
+      if (hudDate) hudDate.textContent = dateString;
+
+    }
+
+    setInterval(updateClock, 1000);
+
+    updateClock();
+
+
+
+    // Set dynamic footer year
+
+    const yearElem = document.getElementById('year-field');
+
+    if (yearElem) yearElem.textContent = new Date().getFullYear();
+
+
+
+    /* =================================================================
+
+       2. INTERACTIVE DUAL-RING GLOWING MOUSE CURSOR
+
+       ================================================================= */
+
+    const cursorDot = document.getElementById('cursor-dot');
+
+    const cursorRing = document.getElementById('custom-cursor');
+
+    let mouseX = window.innerWidth / 2;
+
+    let mouseY = window.innerHeight / 2;
+
+    let ringX = mouseX;
+
+    let ringY = mouseY;
+
+
+
+    window.addEventListener('mousemove', (e) => {
+
+      mouseX = e.clientX;
+
+      mouseY = e.clientY;
+
+      if (cursorDot) {
+
+        cursorDot.style.left = `${mouseX}px`;
+
+        cursorDot.style.top = `${mouseY}px`;
+
+      }
+
+    });
+
+
+
+    function renderCursor() {
+
+      ringX += (mouseX - ringX) * 0.18;
+
+      ringY += (mouseY - ringY) * 0.18;
+
+      if (cursorRing) {
+
+        cursorRing.style.left = `${ringX}px`;
+
+        cursorRing.style.top = `${ringY}px`;
+
+      }
+
+      requestAnimationFrame(renderCursor);
+
+    }
+
+    renderCursor();
+
+
+
+    // Scale up cursor ring when hovering interactive elements
+
+    const interactiveElements = document.querySelectorAll('a, button, input, textarea, .glass-card, .interactive-btn');
+
+    interactiveElements.forEach((el) => {
+
+      el.addEventListener('mouseenter', () => {
+
+        if (cursorRing) {
+
+          cursorRing.style.transform = 'translate(-50%, -50%) scale(1.8)';
+
+          cursorRing.style.borderColor = '#00ff9d';
+
+          cursorRing.style.boxShadow = '0 0 25px rgba(0, 255, 157, 0.6)';
+
+        }
+
+      });
+
+      el.addEventListener('mouseleave', () => {
+
+        if (cursorRing) {
+
+          cursorRing.style.transform = 'translate(-50%, -50%) scale(1)';
+
+          cursorRing.style.borderColor = 'rgba(0, 242, 254, 0.6)';
+
+          cursorRing.style.boxShadow = '0 0 15px rgba(0, 242, 254, 0.3)';
+
+        }
+
+      });
+
+    });
+
+
+
+    /* =================================================================
+
+       3. HIGH-DENSITY INTERACTIVE NEON PARTICLE PHYSICS CANVAS
+
+       ================================================================= */
+
+    const canvas = document.getElementById('particleCanvas');
+
+    const ctx = canvas.getContext('2d');
+
+
+
+    let particles = [];
+
+    let width = (canvas.width = window.innerWidth);
+
+    let height = (canvas.height = window.innerHeight);
+
+
+
+    window.addEventListener('resize', () => {
+
+      width = canvas.width = window.innerWidth;
+
+      height = canvas.height = window.innerHeight;
+
+      initParticles();
+
+    });
+
+
+
+    // Particle Config
+
+    const isMobile = window.innerWidth < 768;
+
+    const particleCount = isMobile ? 65 : 140; // Dense network
+
+    const connectionDistance = isMobile ? 90 : 130;
+
+    const mouseRadius = 150;
+
+
+
+    let mousePos = { x: -1000, y: -1000 };
+
+    window.addEventListener('mousemove', (e) => {
+
+      mousePos.x = e.clientX;
+
+      mousePos.y = e.clientY;
+
+    });
+
+    window.addEventListener('mouseleave', () => {
+
+      mousePos.x = -1000;
+
+      mousePos.y = -1000;
+
+    });
+
+
+
+    class Particle {
+
+      constructor() {
+
+        this.x = Math.random() * width;
+
+        this.y = Math.random() * height;
+
+        this.vx = (Math.random() - 0.5) * 0.9;
+
+        this.vy = (Math.random() - 0.5) * 0.9;
+
+        this.radius = Math.random() * 1.8 + 1;
+
+        // Color palette: Cyan, Violet, Pink
+
+        const palette = [
+
+          'rgba(0, 242, 254, ', 
+
+          'rgba(155, 81, 224, ', 
+
+          'rgba(255, 0, 127, '
+
+        ];
+
+        this.color = palette[Math.floor(Math.random() * palette.length)];
+
+        this.alpha = Math.random() * 0.6 + 0.3;
+
+      }
+
+
+
+      update() {
+
+        this.x += this.vx;
+
+        this.y += this.vy;
+
+
+
+        // Bounce from walls
+
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+
+
+
+        // Mouse displacement & repulsion interaction
+
+        const dx = mousePos.x - this.x;
+
+        const dy = mousePos.y - this.y;
+
+        const dist = Math.hypot(dx, dy);
+
+
+
+        if (dist < mouseRadius) {
+
+          const force = (mouseRadius - dist) / mouseRadius;
+
+          const angle = Math.atan2(dy, dx);
+
+          this.x -= Math.cos(angle) * force * 3;
+
+          this.y -= Math.sin(angle) * force * 3;
+
+        }
+
+      }
+
+
+
+      draw() {
+
+        ctx.beginPath();
+
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+
+        ctx.fillStyle = this.color + this.alpha + ')';
+
+        ctx.shadowColor = this.color + '1)';
+
+        ctx.shadowBlur = 8;
+
+        ctx.fill();
+
+        ctx.shadowBlur = 0; // Reset shadow for performance
+
+      }
+
+    }
+
+
+
+    function initParticles() {
+
+      particles = [];
+
+      for (let i = 0; i < particleCount; i++) {
+
+        particles.push(new Particle());
+
+      }
+
+    }
+
+    initParticles();
+
+
+
+    function animateParticles() {
+
+      ctx.clearRect(0, 0, width, height);
+
+
+
+      // Connect particles with glowing neon lines
+
+      for (let i = 0; i < particles.length; i++) {
+
+        for (let j = i + 1; j < particles.length; j++) {
+
+          const dx = particles[i].x - particles[j].x;
+
+          const dy = particles[i].y - particles[j].y;
+
+          const dist = Math.hypot(dx, dy);
+
+
+
+          if (dist < connectionDistance) {
+
+            const alpha = 1 - dist / connectionDistance;
+
+            ctx.beginPath();
+
+            ctx.moveTo(particles[i].x, particles[i].y);
+
+            ctx.lineTo(particles[j].x, particles[j].y);
+
+            ctx.strokeStyle = `rgba(0, 242, 254, ${alpha * 0.25})`;
+
+            ctx.lineWidth = 0.75;
+
+            ctx.stroke();
+
+          }
+
+        }
+
+      }
+
+
+
+      // Connect to mouse pointer
+
+      for (let i = 0; i < particles.length; i++) {
+
+        const dx = particles[i].x - mousePos.x;
+
+        const dy = particles[i].y - mousePos.y;
+
+        const dist = Math.hypot(dx, dy);
+
+        if (dist < mouseRadius) {
+
+          const alpha = 1 - dist / mouseRadius;
+
+          ctx.beginPath();
+
+          ctx.moveTo(particles[i].x, particles[i].y);
+
+          ctx.lineTo(mousePos.x, mousePos.y);
+
+          ctx.strokeStyle = `rgba(155, 81, 224, ${alpha * 0.45})`;
+
+          ctx.lineWidth = 1;
+
+          ctx.stroke();
+
+        }
+
+      }
+
+
+
+      // Update and draw particles
+
+      for (let i = 0; i < particles.length; i++) {
+
+        particles[i].update();
+
+        particles[i].draw();
+
+      }
+
+
+
+      requestAnimationFrame(animateParticles);
+
+    }
+
+    animateParticles();
+
+
+
+    /* =================================================================
+
+       4. TERMINAL TYPING EFFECT (Hero Section)
+
+       ================================================================= */
+
+    const roles = [
+
+      "Building Production-Ready Software.",
+      "Java • Spring Boot • React.",
+      "Turning Ideas into Scalable Products.",
+      "AI-Powered Solutions. Clean Engineering.",
+      "Future Software Engineer • 2027.",
+
+    ];
+
+    let roleIndex = 0;
+
+    let charIndex = 0;
+
+    let isDeleting = false;
+
+    const typeElement = document.getElementById('dynamic-type');
+
+
+
+    function typeLoop() {
+
+      const currentText = roles[roleIndex];
+
+      if (isDeleting) {
+
+        typeElement.textContent = currentText.substring(0, charIndex - 1);
+
+        charIndex--;
+
+      } else {
+
+        typeElement.textContent = currentText.substring(0, charIndex + 1);
+
+        charIndex++;
+
+      }
+
+
+
+      let speed = isDeleting ? 40 : 80;
+
+
+
+      if (!isDeleting && charIndex === currentText.length) {
+
+        speed = 2000; // Pause at end
+
+        isDeleting = true;
+
+      } else if (isDeleting && charIndex === 0) {
+
+        isDeleting = false;
+
+        roleIndex = (roleIndex + 1) % roles.length;
+
+        speed = 500; // Pause before new word
+
+      }
+
+
+
+      setTimeout(typeLoop, speed);
+
+    }
+
+    typeLoop();
+
+
+
+    /* =================================================================
+
+       5. SCROLL REVEAL (IntersectionObserver)
+
+       ================================================================= */
+
+    const revealElements = document.querySelectorAll('.reveal-elem');
+
+    const revealObserver = new IntersectionObserver((entries) => {
+
+      entries.forEach((entry) => {
+
+        if (entry.isIntersecting) {
+
+          entry.target.classList.add('active');
+
+        }
+
+      });
+
+    }, {
+
+      threshold: 0.15,
+
+      rootMargin: '0px 0px -50px 0px'
+
+    });
+
+
+
+    revealElements.forEach((el) => revealObserver.observe(el));
+
+
+
+    /* =================================================================
+
+       6. FLOATING NAV BAR SCROLL SPY & ACTIVE HIGHLIGHT
+
+       ================================================================= */
+
+    const sections = document.querySelectorAll('section');
+
+    const navItems = document.querySelectorAll('.nav-item');
+
+
+
+    window.addEventListener('scroll', () => {
+
+      let currentSectionId = '';
+
+      sections.forEach((section) => {
+
+        const sectionTop = section.offsetTop - 200;
+
+        if (window.scrollY >= sectionTop) {
+
+          currentSectionId = section.getAttribute('id');
+
+        }
+
+      });
+
+
+
+      navItems.forEach((link) => {
+
+        if (link.getAttribute('data-target') === currentSectionId) {
+
+          link.classList.add('bg-white/20', 'text-neonCyan', 'font-semibold');
+
+          link.classList.remove('text-slate-400');
+
+        } else {
+
+          link.classList.remove('bg-white/20', 'text-neonCyan', 'font-semibold');
+
+          link.classList.add('text-slate-400');
+
+        }
+
+      });
+
+    });
+
+
+
+    /* =================================================================
+
+       7. CLIPBOARD COPY EMAIL HELPER
+
+       ================================================================= */
+
+    const copyEmailBtn = document.getElementById('copy-email-btn');
+
+    const copyEmailText = document.getElementById('copy-email-text');
+
+
+
+    if (copyEmailBtn) {
+
+      copyEmailBtn.addEventListener('click', () => {
+
+        const email = 'sinhadivyanshi2205@gmail.com';
+
+        // ExecCommand copy compatibility
+
+        const tempInput = document.createElement('textarea');
+
+        tempInput.value = email;
+
+        document.body.appendChild(tempInput);
+
+        tempInput.select();
+
+        document.execCommand('copy');
+
+        document.body.removeChild(tempInput);
+
+
+
+        const original = copyEmailText.textContent;
+
+        copyEmailText.textContent = 'COPIED TO CLIPBOARD!';
+
+        copyEmailBtn.classList.add('border-neonCyan', 'text-neonCyan');
+
+
+
+        setTimeout(() => {
+
+          copyEmailText.textContent = original;
+
+          copyEmailBtn.classList.remove('border-neonCyan', 'text-neonCyan');
+
+        }, 2200);
+
+      });
+
+    }
+
+
+
+    /* =================================================================
+
+       8. CONTACT FORM SIMULATION
+
+       ================================================================= */
+
+    const contactForm = document.getElementById('portfolio-contact-form');
+
+    const feedbackBox = document.getElementById('form-feedback');
+
+    const submitBtn = document.getElementById('submit-btn');
+
+
+
+    if (contactForm) {
+
+      contactForm.addEventListener('submit', (e) => {
+
+        e.preventDefault();
+
+        
+
+        submitBtn.disabled = true;
+
+        submitBtn.innerHTML = `
+
+          <i class="fa-solid fa-spinner fa-spin text-sm"></i>
+
+          <span>ENCRYPTING & SENDING...</span>
+
+        `;
+
+
+
+        setTimeout(() => {
+
+          contactForm.reset();
+
+          submitBtn.disabled = false;
+
+          submitBtn.innerHTML = `
+
+            <span>TRANSMIT MESSAGE</span>
+
+            <i class="fa-solid fa-paper-plane text-xs"></i>
+
+          `;
+
+
+
+          if (feedbackBox) {
+
+            feedbackBox.className = 'p-3 rounded-xl text-center text-xs font-mono bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 block';
+
+            feedbackBox.innerHTML = `
+
+              <i class="fa-solid fa-circle-check mr-1.5"></i>
+
+              Message successfully dispatched to Alex Carter. I'll get back to you within 24 hours!
+
+            `;
+
+            setTimeout(() => {
+
+              feedbackBox.className = 'hidden';
+
+            }, 6000);
+
+          }
+
+        }, 1200);
+
+      });
+
+    }
+
+  </script>
+
+</body>
+
+</html>

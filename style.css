@@ -1,0 +1,96 @@
+* {
+  cursor: none; /* Hide default cursor to enable custom glowing dual ring cursor */
+}
+
+
+/* Fallback for touch devices to restore default cursor */
+@media (pointer: coarse) {
+  * {
+    cursor: auto;
+  }
+  #custom-cursor, #cursor-dot {
+    display: none !important;
+  }
+}
+
+
+body {
+  background-color: #06070b;
+  color: #e2e8f0;
+  overflow-x: hidden;
+  font-family: 'JetBrains Mono', monospace;
+}
+
+
+/* Custom Webkit Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #08080d;
+}
+::-webkit-scrollbar-thumb {
+  background: #1a2236;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #00f2fe;
+  box-shadow: 0 0 10px #00f2fe;
+}
+
+
+/* Holographic / Scanline Overlay effect on photograph */
+.scanline-box::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 242, 254, 0.15) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
+  z-index: 20;
+  background-size: 100% 4px, 6px 100%;
+  pointer-events: none;
+}
+
+
+/* Reveal Section Animations */
+.reveal-elem {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-elem.active {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* Glowing border animation */
+@keyframes pulseGlow {
+  0%, 100% {
+    border-color: rgba(0, 242, 254, 0.3);
+    box-shadow: 0 0 15px rgba(0, 242, 254, 0.2);
+  }
+  50% {
+    border-color: rgba(155, 81, 224, 0.6);
+    box-shadow: 0 0 25px rgba(155, 81, 224, 0.3);
+  }
+}
+
+
+.pulse-glow-border {
+  animation: pulseGlow 4s infinite ease-in-out;
+}
+
+
+/* Glass card utility */
+.glass-card {
+  background: rgba(12, 16, 26, 0.7);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: all 0.3s ease;
+}
+.glass-card:hover {
+  border-color: rgba(0, 242, 254, 0.4);
+  transform: translateY(-4px);
+}
