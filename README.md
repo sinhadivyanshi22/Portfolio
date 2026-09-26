@@ -45,9 +45,9 @@ Then visit `http://localhost:8000`.
 ## Contact
 
 - **Email:** sinhadivyanshi2205@gmail.com
-- **LinkedIn:** <Link url="https://www.linkedin.com/in/divyanshi-sinha-9765022a0/" title="Divyanshi Sinha"/>
-- **GitHub:** <Link url="https://github.com/sinhadivyanshi22" title="@sinhadivyanshi22"/>
-- **LeetCode:** <Link url="https://leetcode.com/u/divyanshisin2205/" title="@divyanshisin2205"/>
+- **LinkedIn:** [Divyanshi Sinha](https://www.linkedin.com/in/divyanshi-sinha-9765022a0/)
+- **GitHub:** [@sinhadivyanshi22](https://github.com/sinhadivyanshi22)
+- **LeetCode:** [@divyanshisin2205](https://leetcode.com/u/divyanshisin2205/)
 
 ---
 
