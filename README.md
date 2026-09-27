@@ -35,9 +35,6 @@ cd Portfolio
 ```
 
 
-
-Then visit `http://localhost:8000`.
-
 ## Contact
 
 - **Email:** sinhadivyanshi2205@gmail.com
