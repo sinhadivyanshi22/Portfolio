@@ -34,11 +34,7 @@ git clone https://github.com/sinhadivyanshi22/Portfolio.git
 cd Portfolio
 ```
 
-Or run a local server:
 
-```bash
-python -m http.server 8000
-```
 
 Then visit `http://localhost:8000`.
 
