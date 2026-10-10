@@ -2,6 +2,9 @@
 
 My personal portfolio website showcasing my skills, projects, certifications, and coding journey.
 
+## Live Demo
+[View Portfolio]((https://divyanshisinha-portfolio.netlify.app/))
+
 ## Tech Stack
 - HTML, CSS, JavaScript
 - Node.js and Express.js
@@ -24,7 +27,7 @@ npm install
 npm run dev
 ```
 
-Configure the required environment variables for the backend before using the contact form.
+Configure the required backend environment variables before using the contact form.
 
 ## Connect With Me
 - **Email:** sinhadivyanshi2205@gmail.com
@@ -33,5 +36,7 @@ Configure the required environment variables for the backend before using the co
 - **LeetCode:** [divyanshisin2205](https://leetcode.com/u/divyanshisin2205/)
 
 ---
+
+If you like this project, consider giving it a ⭐ on GitHub!
 
 Made with ❤️ by Divyanshi Sinha.
