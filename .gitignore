@@ -1,0 +1,9 @@
+node_modules/
+
+# Backend environment
+backend/.env
+backend/.env.local
+
+# General
+.env.local
+*.log

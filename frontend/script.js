@@ -26,7 +26,6 @@ function updateClock() {
 setInterval(updateClock, 1000);
 updateClock();
 
-// Set dynamic footer year
 const yearElem = document.getElementById('year-field');
 if (yearElem) yearElem.textContent = new Date().getFullYear();
 
@@ -61,7 +60,6 @@ function renderCursor() {
 }
 renderCursor();
 
-// Scale up cursor ring when hovering interactive elements
 const interactiveElements = document.querySelectorAll('a, button, input, textarea, .glass-card, .interactive-btn');
 interactiveElements.forEach((el) => {
   el.addEventListener('mouseenter', () => {
@@ -81,146 +79,16 @@ interactiveElements.forEach((el) => {
 });
 
 /* =================================================================
-   3. HIGH-DENSITY INTERACTIVE NEON PARTICLE PHYSICS CANVAS
-   ================================================================= */
-const canvas = document.getElementById('particleCanvas');
-const ctx = canvas.getContext('2d');
-
-let particles = [];
-let width = (canvas.width = window.innerWidth);
-let height = (canvas.height = window.innerHeight);
-
-window.addEventListener('resize', () => {
-  width = canvas.width = window.innerWidth;
-  height = canvas.height = window.innerHeight;
-  initParticles();
-});
-
-// Particle Config
-const isMobile = window.innerWidth < 768;
-const particleCount = isMobile ? 65 : 140;
-const connectionDistance = isMobile ? 90 : 130;
-const mouseRadius = 150;
-
-let mousePos = { x: -1000, y: -1000 };
-window.addEventListener('mousemove', (e) => {
-  mousePos.x = e.clientX;
-  mousePos.y = e.clientY;
-});
-window.addEventListener('mouseleave', () => {
-  mousePos.x = -1000;
-  mousePos.y = -1000;
-});
-
-class Particle {
-  constructor() {
-    this.x = Math.random() * width;
-    this.y = Math.random() * height;
-    this.vx = (Math.random() - 0.5) * 0.9;
-    this.vy = (Math.random() - 0.5) * 0.9;
-    this.radius = Math.random() * 1.8 + 1;
-    const palette = [
-      'rgba(0, 242, 254, ',
-      'rgba(155, 81, 224, ',
-      'rgba(255, 0, 127, '
-    ];
-    this.color = palette[Math.floor(Math.random() * palette.length)];
-    this.alpha = Math.random() * 0.6 + 0.3;
-  }
-
-  update() {
-    this.x += this.vx;
-    this.y += this.vy;
-
-    if (this.x < 0 || this.x > width) this.vx *= -1;
-    if (this.y < 0 || this.y > height) this.vy *= -1;
-
-    const dx = mousePos.x - this.x;
-    const dy = mousePos.y - this.y;
-    const dist = Math.hypot(dx, dy);
-
-    if (dist < mouseRadius) {
-      const force = (mouseRadius - dist) / mouseRadius;
-      const angle = Math.atan2(dy, dx);
-      this.x -= Math.cos(angle) * force * 3;
-      this.y -= Math.sin(angle) * force * 3;
-    }
-  }
-
-  draw() {
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = this.color + this.alpha + ')';
-    ctx.shadowColor = this.color + '1)';
-    ctx.shadowBlur = 8;
-    ctx.fill();
-    ctx.shadowBlur = 0;
-  }
-}
-
-function initParticles() {
-  particles = [];
-  for (let i = 0; i < particleCount; i++) {
-    particles.push(new Particle());
-  }
-}
-initParticles();
-
-function animateParticles() {
-  ctx.clearRect(0, 0, width, height);
-
-  for (let i = 0; i < particles.length; i++) {
-    for (let j = i + 1; j < particles.length; j++) {
-      const dx = particles[i].x - particles[j].x;
-      const dy = particles[i].y - particles[j].y;
-      const dist = Math.hypot(dx, dy);
-
-      if (dist < connectionDistance) {
-        const alpha = 1 - dist / connectionDistance;
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(0, 242, 254, ${alpha * 0.25})`;
-        ctx.lineWidth = 0.75;
-        ctx.stroke();
-      }
-    }
-  }
-
-  for (let i = 0; i < particles.length; i++) {
-    const dx = particles[i].x - mousePos.x;
-    const dy = particles[i].y - mousePos.y;
-    const dist = Math.hypot(dx, dy);
-    if (dist < mouseRadius) {
-      const alpha = 1 - dist / mouseRadius;
-      ctx.beginPath();
-      ctx.moveTo(particles[i].x, particles[i].y);
-      ctx.lineTo(mousePos.x, mousePos.y);
-      ctx.strokeStyle = `rgba(155, 81, 224, ${alpha * 0.45})`;
-      ctx.lineWidth = 1;
-      ctx.stroke();
-    }
-  }
-
-  for (let i = 0; i < particles.length; i++) {
-    particles[i].update();
-    particles[i].draw();
-  }
-
-  requestAnimationFrame(animateParticles);
-}
-animateParticles();
-
-/* =================================================================
    4. TERMINAL TYPING EFFECT (Hero Section)
    ================================================================= */
 const roles = [
-  "4th Year B.Tech Computer Science Student",
-  "Full-Stack Software Engineer",
-  "Distributed Systems & Cloud Enthusiast",
-  "600+ LeetCode Solved & Algorithmic Thinker",
-  "Building Scalable Backend Microservices"
+  "Building Production-Ready Software.",
+  "Java • Spring Boot • React.",
+  "Turning Ideas into Scalable Products.",
+  "AI-Powered Solutions. Clean Engineering.",
+  "Future Software Engineer • 2027.",
 ];
+
 let roleIndex = 0;
 let charIndex = 0;
 let isDeleting = false;
@@ -323,41 +191,138 @@ if (copyEmailBtn) {
 }
 
 /* =================================================================
-   8. CONTACT FORM SIMULATION
+   8. CONTACT FORM -> POST /api/contact
    ================================================================= */
 const contactForm = document.getElementById('portfolio-contact-form');
 const feedbackBox = document.getElementById('form-feedback');
 const submitBtn = document.getElementById('submit-btn');
 
+function getContactEndpoint() {
+  const configured = (typeof window !== 'undefined' && window.PORTFOLIO_CONFIG && window.PORTFOLIO_CONFIG.API_BASE_URL)
+    || (typeof document !== 'undefined' && document.querySelector('meta[name="backend-api-url"]')?.getAttribute('content'));
+  
+  if (configured && typeof configured === 'string' && configured.trim() !== '') {
+    return configured.trim().replace(/\/+$/, '') + '/api/contact';
+  }
+
+  const isLocal = typeof window !== 'undefined' && 
+    (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1');
+
+  if (isLocal) {
+    if (window.location.port === '4173') {
+      return '/api/contact';
+    }
+    return 'http://localhost:4173/api/contact';
+  }
+
+  if (typeof window !== 'undefined' && window.location.protocol === 'file:') {
+    return 'http://localhost:4173/api/contact';
+  }
+
+  return '/api/contact';
+}
+
+const CONTACT_FORM_RENDERED_AT = Date.now();
+const CONTACT_IDLE_LABEL = '<span>TRANSMIT MESSAGE</span><i class="fa-solid fa-paper-plane text-xs"></i>';
+const CONTACT_BUSY_LABEL = '<i class="fa-solid fa-spinner fa-spin text-sm"></i><span>TRANSMIT IN PROGRESS...</span>';
+
+function setSubmitBusy(isBusy) {
+  if (!submitBtn) return;
+  submitBtn.disabled = isBusy;
+  submitBtn.innerHTML = isBusy ? CONTACT_BUSY_LABEL : CONTACT_IDLE_LABEL;
+}
+
+function showFeedback(tone, html) {
+  if (!feedbackBox) return;
+  const tones = {
+    success: 'p-3 rounded-xl text-center text-xs font-mono bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 block',
+    error: 'p-3 rounded-xl text-center text-xs font-mono bg-red-950/60 border border-red-500/50 text-red-300 block'
+  };
+  feedbackBox.className = tones[tone] || 'hidden';
+  feedbackBox.innerHTML = html;
+}
+
+function clearFeedback() {
+  if (!feedbackBox) return;
+  feedbackBox.className = 'hidden';
+  feedbackBox.innerHTML = '';
+}
+
 if (contactForm) {
-  contactForm.addEventListener('submit', (e) => {
+  contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    submitBtn.disabled = true;
-    submitBtn.innerHTML = `
-      <i class="fa-solid fa-spinner fa-spin text-sm"></i>
-      <span>ENCRYPTING & SENDING...</span>
-    `;
+    const readValue = (id) => {
+      const input = document.getElementById(id);
+      return input ? input.value : '';
+    };
 
-    setTimeout(() => {
-      contactForm.reset();
-      submitBtn.disabled = false;
-      submitBtn.innerHTML = `
-        <span>TRANSMIT MESSAGE</span>
-        <i class="fa-solid fa-paper-plane text-xs"></i>
-      `;
+    const payload = {
+      name: readValue('form-name'),
+      email: readValue('form-email'),
+      subject: readValue('form-subject'),
+      message: readValue('form-message'),
+      company_website: readValue('form-website'),
+      renderedAt: CONTACT_FORM_RENDERED_AT
+    };
 
-      if (feedbackBox) {
-        feedbackBox.className = 'p-3 rounded-xl text-center text-xs font-mono bg-emerald-950/60 border border-emerald-500/50 text-emerald-300 block';
-        feedbackBox.innerHTML = `
-          <i class="fa-solid fa-circle-check mr-1.5"></i>
-          Message successfully dispatched to Divyanshi Sinha. I will get back to you within 24 hours!
-        `;
+    clearFeedback();
+    setSubmitBusy(true);
 
-        setTimeout(() => {
-          feedbackBox.className = 'hidden';
-        }, 6000);
+    const endpoint = getContactEndpoint();
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await response.json().catch(() => null);
+
+      if (!response.ok || !data || !data.ok) {
+        if (response.status === 404) {
+          throw new Error('API endpoint not found (HTTP 404). If your frontend is deployed to a static host (like GitHub Pages), configure your backend URL in frontend/config.js.');
+        }
+        if (response.status === 403) {
+          throw new Error('Origin blocked by CORS (HTTP 403). Please add your site domain to ALLOWED_ORIGIN in backend/.env.');
+        }
+        if (response.status === 429) {
+          throw new Error('Too many requests. Please wait a few minutes before trying again.');
+        }
+        throw new Error((data && data.error) || `Request failed (HTTP ${response.status}). Please try again.`);
       }
-    }, 1200);
+
+      contactForm.reset();
+      showFeedback('success', '<i class="fa-solid fa-circle-check mr-1.5"></i> Message successfully dispatched to Divyanshi Sinha. I will get back to you within 24 hours!');
+      setTimeout(clearFeedback, 6000);
+    } catch (err) {
+      let message = err.message;
+      if (err instanceof TypeError) {
+        const isLocal = typeof window !== 'undefined' &&
+          (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:');
+        const isStaticHost = typeof window !== 'undefined' &&
+          (window.location.hostname.endsWith('github.io') || window.location.hostname.endsWith('vercel.app') || window.location.hostname.endsWith('netlify.app'));
+
+        if (isLocal) {
+          message = 'Could not reach the backend server at localhost:4173. Please make sure the backend is running (run `npm start` in your terminal).';
+        } else if (isStaticHost && (!window.PORTFOLIO_CONFIG || !window.PORTFOLIO_CONFIG.API_BASE_URL)) {
+          message = 'Backend API is not configured for this static site. Please set your deployed backend URL in `frontend/config.js`, or email me directly at sinhadivyanshi2205@gmail.com.';
+        } else {
+          message = 'Could not reach the server. Please check your network connection, or email me directly at sinhadivyanshi2205@gmail.com.';
+        }
+      }
+      showFeedback('error', `<i class="fa-solid fa-circle-exclamation mr-1.5"></i> ${message}`);
+    } finally {
+      setSubmitBusy(false);
+    }
   });
 }
+
+
+
+/* =================================================================
+   9. PERMANENT DARK THEME
+   ================================================================= */
+document.documentElement.classList.add('dark');
+

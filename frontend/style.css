@@ -1,9 +1,7 @@
 * {
-  cursor: none; /* Hide default cursor to enable custom glowing dual ring cursor */
+  cursor: none;
 }
 
-
-/* Fallback for touch devices to restore default cursor */
 @media (pointer: coarse) {
   * {
     cursor: auto;
@@ -14,15 +12,7 @@
 }
 
 
-body {
-  background-color: #06070b;
-  color: #e2e8f0;
-  overflow-x: hidden;
-  font-family: 'JetBrains Mono', monospace;
-}
 
-
-/* Custom Webkit Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
 }
@@ -38,8 +28,6 @@ body {
   box-shadow: 0 0 10px #00f2fe;
 }
 
-
-/* Holographic / Scanline Overlay effect on photograph */
 .scanline-box::before {
   content: " ";
   display: block;
@@ -51,8 +39,6 @@ body {
   pointer-events: none;
 }
 
-
-/* Reveal Section Animations */
 .reveal-elem {
   opacity: 0;
   transform: translateY(30px);
@@ -63,8 +49,6 @@ body {
   transform: translateY(0);
 }
 
-
-/* Glowing border animation */
 @keyframes pulseGlow {
   0%, 100% {
     border-color: rgba(0, 242, 254, 0.3);
@@ -76,21 +60,52 @@ body {
   }
 }
 
-
 .pulse-glow-border {
   animation: pulseGlow 4s infinite ease-in-out;
 }
 
 
-/* Glass card utility */
-.glass-card {
-  background: rgba(12, 16, 26, 0.7);
+.dark 
+
+
+/* Theme Overrides */
+body {
+  /* Colors handled by tailwind */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Glass Card (Permanent Dark Mode) */
+.glass-card,
+.dark .glass-card {
+  background: rgba(14, 17, 27, 0.75);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 1rem;
+  box-shadow: none;
   transition: all 0.3s ease;
 }
-.glass-card:hover {
-  border-color: rgba(0, 242, 254, 0.4);
+.glass-card:hover,
+.dark .glass-card:hover {
   transform: translateY(-4px);
+  border-color: rgba(0, 87, 255, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
 }
+
+/* Scrollbar customization (Permanent Dark Mode) */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #0057ff;
+}
+
