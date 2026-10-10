@@ -3,7 +3,7 @@
 My personal portfolio website showcasing my skills, projects, certifications, and coding journey.
 
 ## Live Demo
-[View Portfolio]((https://divyanshisinha-portfolio.netlify.app/))
+[View Portfolio](https://divyanshisinha-portfolio.netlify.app/)
 
 ## Tech Stack
 - HTML, CSS, JavaScript
